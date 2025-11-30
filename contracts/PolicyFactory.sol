@@ -195,71 +195,54 @@ contract PolicyFactory is Ownable {
     }
 
     /**
-     * @notice Create multiple policies in batch
-     * @param templateIds Array of template IDs
+     * @notice Create multiple policies in batch (simplified)
+     * @param templateId Template ID to use for all policies
      * @param locationHashes Array of location hashes
-     * @param baseCoverages Array of base coverage amounts
-     * @param cropTypes Array of crop types
-     * @param farmSizes Array of farm sizes
+     * @param baseCoverage Base coverage amount for all policies
+     * @param cropType Crop type for all policies
+     * @param farmSize Farm size for all policies
      */
     function createBatchPolicies(
-        uint256[] calldata templateIds,
+        uint256 templateId,
         bytes32[] calldata locationHashes,
-        uint256[] calldata baseCoverages,
-        string[] calldata cropTypes,
-        uint256[] calldata farmSizes
+        uint256 baseCoverage,
+        string calldata cropType,
+        uint256 farmSize
     ) external payable returns (uint256[] memory policyIds) {
-        require(
-            templateIds.length == locationHashes.length &&
-            templateIds.length == baseCoverages.length &&
-            templateIds.length == cropTypes.length &&
-            templateIds.length == farmSizes.length,
-            "PF: array length mismatch"
+        require(templateId <= templateCount && templateId > 0, "PF: invalid template");
+        require(locationHashes.length > 0, "PF: empty array");
+        
+        PolicyTemplate storage template = templates[templateId];
+        require(template.isActive, "PF: template not active");
+
+        uint256 coverageAmount = (baseCoverage * template.coverageMultiplier) / 10000;
+        uint256 premiumPerPolicy = insuranceContract.calculatePremium(
+            coverageAmount,
+            template.duration,
+            template.triggerType
         );
+        
+        uint256 totalPremium = premiumPerPolicy * locationHashes.length;
+        require(msg.value >= totalPremium, "PF: insufficient premium");
 
-        policyIds = new uint256[](templateIds.length);
-        uint256 totalPremiumNeeded = 0;
+        policyIds = new uint256[](locationHashes.length);
 
-        // Calculate total premium needed
-        for (uint256 i = 0; i < templateIds.length; i++) {
-            PolicyTemplate storage template = templates[templateIds[i]];
-            uint256 coverageAmount = (baseCoverages[i] * template.coverageMultiplier) / 10000;
-            totalPremiumNeeded += insuranceContract.calculatePremium(
-                coverageAmount,
-                template.duration,
-                template.triggerType
-            );
-        }
-
-        require(msg.value >= totalPremiumNeeded, "PF: insufficient premium");
-
-        // Create policies
-        uint256 remainingValue = msg.value;
-        for (uint256 i = 0; i < templateIds.length; i++) {
-            PolicyTemplate storage template = templates[templateIds[i]];
-            uint256 coverageAmount = (baseCoverages[i] * template.coverageMultiplier) / 10000;
-            uint256 premium = insuranceContract.calculatePremium(
-                coverageAmount,
-                template.duration,
-                template.triggerType
-            );
-
-            policyIds[i] = insuranceContract.createPolicy{value: premium}(
+        for (uint256 i = 0; i < locationHashes.length; i++) {
+            policyIds[i] = insuranceContract.createPolicy{value: premiumPerPolicy}(
                 locationHashes[i],
                 template.triggerType,
                 template.triggerThreshold,
                 coverageAmount,
                 template.duration,
-                cropTypes[i],
-                farmSizes[i]
+                cropType,
+                farmSize
             );
-
-            remainingValue -= premium;
         }
 
         // Refund excess
-        if (remainingValue > 0) {
-            (bool success, ) = payable(msg.sender).call{value: remainingValue}("");
+        uint256 excess = msg.value - totalPremium;
+        if (excess > 0) {
+            (bool success, ) = payable(msg.sender).call{value: excess}("");
             require(success, "PF: refund failed");
         }
 
