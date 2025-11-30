@@ -44,18 +44,72 @@ const WeatherShieldInsuranceABI = [
 ]
 
 const PolicyFactoryABI = [
-  'function createPolicyFromTemplate(uint256 templateId, bytes32 locationHash, uint256 baseCoverage, string cropType, uint256 farmSize) payable returns (uint256)',
-  'function estimatePremium(uint256 templateId, uint256 baseCoverage) view returns (uint256)',
-  'function getActiveTemplates() view returns (tuple(string name, uint8 triggerType, int256 triggerThreshold, uint256 coverageMultiplier, uint256 duration, bool isActive)[])',
-  'function templates(uint256 templateId) view returns (string name, uint8 triggerType, int256 triggerThreshold, uint256 coverageMultiplier, uint256 duration, bool isActive)',
-  'function templateCount() view returns (uint256)',
+  {
+    "inputs": [{"internalType": "uint256","name": "templateId","type": "uint256"},{"internalType": "bytes32","name": "locationHash","type": "bytes32"},{"internalType": "uint256","name": "baseCoverage","type": "uint256"},{"internalType": "string","name": "cropType","type": "string"},{"internalType": "uint256","name": "farmSize","type": "uint256"}],
+    "name": "createPolicyFromTemplate",
+    "outputs": [{"internalType": "uint256","name": "","type": "uint256"}],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "uint256","name": "templateId","type": "uint256"},{"internalType": "uint256","name": "baseCoverage","type": "uint256"}],
+    "name": "estimatePremium",
+    "outputs": [{"internalType": "uint256","name": "","type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getActiveTemplates",
+    "outputs": [{"components": [{"internalType": "string","name": "name","type": "string"},{"internalType": "uint8","name": "triggerType","type": "uint8"},{"internalType": "int256","name": "triggerThreshold","type": "int256"},{"internalType": "uint256","name": "coverageMultiplier","type": "uint256"},{"internalType": "uint256","name": "duration","type": "uint256"},{"internalType": "bool","name": "isActive","type": "bool"}],"internalType": "struct PolicyFactory.PolicyTemplate[]","name": "","type": "tuple[]"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "uint256","name": "templateId","type": "uint256"}],
+    "name": "templates",
+    "outputs": [{"internalType": "string","name": "name","type": "string"},{"internalType": "uint8","name": "triggerType","type": "uint8"},{"internalType": "int256","name": "triggerThreshold","type": "int256"},{"internalType": "uint256","name": "coverageMultiplier","type": "uint256"},{"internalType": "uint256","name": "duration","type": "uint256"},{"internalType": "bool","name": "isActive","type": "bool"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "templateCount",
+    "outputs": [{"internalType": "uint256","name": "","type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  }
 ]
 
 const FlareDataConnectorABI = [
-  'function createLocationHash(int256 latitude, int256 longitude) pure returns (bytes32)',
-  'function getWeatherData(bytes32 requestId) view returns (tuple(uint256 timestamp, int256 temperature, uint256 rainfall, uint256 humidity, uint256 windSpeed, bytes32 locationHash, bool isVerified))',
-  'function getLatestWeatherData(bytes32 locationHash) view returns (tuple(uint256 timestamp, int256 temperature, uint256 rainfall, uint256 humidity, uint256 windSpeed, bytes32 locationHash, bool isVerified))',
-  'function isDataAvailable(bytes32 requestId) view returns (bool available, bool verified)',
+  {
+    "inputs": [{"internalType": "int256","name": "latitude","type": "int256"},{"internalType": "int256","name": "longitude","type": "int256"}],
+    "name": "createLocationHash",
+    "outputs": [{"internalType": "bytes32","name": "","type": "bytes32"}],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "bytes32","name": "requestId","type": "bytes32"}],
+    "name": "getWeatherData",
+    "outputs": [{"components": [{"internalType": "uint256","name": "timestamp","type": "uint256"},{"internalType": "int256","name": "temperature","type": "int256"},{"internalType": "uint256","name": "rainfall","type": "uint256"},{"internalType": "uint256","name": "humidity","type": "uint256"},{"internalType": "uint256","name": "windSpeed","type": "uint256"},{"internalType": "bytes32","name": "locationHash","type": "bytes32"},{"internalType": "bool","name": "isVerified","type": "bool"}],"internalType": "struct FlareDataConnector.WeatherData","name": "","type": "tuple"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "bytes32","name": "locationHash","type": "bytes32"}],
+    "name": "getLatestWeatherData",
+    "outputs": [{"components": [{"internalType": "uint256","name": "timestamp","type": "uint256"},{"internalType": "int256","name": "temperature","type": "int256"},{"internalType": "uint256","name": "rainfall","type": "uint256"},{"internalType": "uint256","name": "humidity","type": "uint256"},{"internalType": "uint256","name": "windSpeed","type": "uint256"},{"internalType": "bytes32","name": "locationHash","type": "bytes32"},{"internalType": "bool","name": "isVerified","type": "bool"}],"internalType": "struct FlareDataConnector.WeatherData","name": "","type": "tuple"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"internalType": "bytes32","name": "requestId","type": "bytes32"}],
+    "name": "isDataAvailable",
+    "outputs": [{"internalType": "bool","name": "available","type": "bool"},{"internalType": "bool","name": "verified","type": "bool"}],
+    "stateMutability": "view",
+    "type": "function"
+  }
 ]
 
 const WeatherOracleABI = [
