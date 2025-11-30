@@ -43,11 +43,12 @@ export default function CreatePolicy() {
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [currentWeather, setCurrentWeather] = useState(null)
 
+  // Fetch templates when factory contract is available (works with read-only provider)
   useEffect(() => {
-    if (contracts.factory && isCorrectNetwork) {
+    if (contracts.factory) {
       fetchTemplates()
     }
-  }, [contracts.factory, isCorrectNetwork])
+  }, [contracts.factory])
 
   const fetchTemplates = async () => {
     try {
