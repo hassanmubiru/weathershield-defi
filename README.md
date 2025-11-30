@@ -1,8 +1,14 @@
 # WeatherShield DeFi 🌾🛡️
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://weathersheld-4ftzu61cn-hassan-mubiru-s-projects.vercel.app)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Flare Network](https://img.shields.io/badge/Built%20on-Flare%20Network-ff6b35)](https://flare.network)
+
 > Decentralized Parametric Insurance Platform for Farmers on Flare Network
 
 WeatherShield DeFi is a blockchain-based crop insurance platform that uses Flare Network's Data Connector (FDC) to automatically trigger insurance payouts based on verified real-world weather data.
+
+**🌐 Live Demo:** [weathersheld.vercel.app](https://weathersheld-4ftzu61cn-hassan-mubiru-s-projects.vercel.app)
 
 ## 🌟 Features
 
@@ -51,7 +57,7 @@ weathershield-defi/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/weathershield-defi.git
+   git clone https://github.com/hassanmubiru/weathershield-defi.git
    cd weathershield-defi
    ```
 
@@ -278,6 +284,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
+- [Live Demo](https://weathersheld-4ftzu61cn-hassan-mubiru-s-projects.vercel.app)
+- [GitHub Repository](https://github.com/hassanmubiru/weathershield-defi)
 - [Flare Network](https://flare.network)
 - [Flare Documentation](https://docs.flare.network)
 - [Flare Data Connector](https://docs.flare.network/tech/data-connector)
@@ -288,4 +296,4 @@ This software is provided "as is" without warranty of any kind. Use at your own 
 
 ---
 
-Built with ❤️ on [Flare Network](https://flare.network)
+Built with ❤️ by [Hassan Mubiru](https://github.com/hassanmubiru) on [Flare Network](https://flare.network)
