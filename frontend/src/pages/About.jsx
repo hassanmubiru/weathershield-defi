@@ -116,18 +116,18 @@ export default function About() {
           <div className="grid md:grid-cols-3 gap-6 text-center">
             <div className="card">
               <Users className="h-10 w-10 text-primary-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">1,000+</h3>
-              <p className="text-gray-400 text-sm">Farmers Protected</p>
+              <h3 className="text-lg font-semibold text-white mb-2">Testnet Live</h3>
+              <p className="text-gray-400 text-sm">On Flare Coston2</p>
             </div>
             <div className="card">
               <Shield className="h-10 w-10 text-green-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">$2M+</h3>
-              <p className="text-gray-400 text-sm">Claims Processed</p>
+              <h3 className="text-lg font-semibold text-white mb-2">Instant</h3>
+              <p className="text-gray-400 text-sm">Claim Processing</p>
             </div>
             <div className="card">
               <Zap className="h-10 w-10 text-flare-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">&lt; 24h</h3>
-              <p className="text-gray-400 text-sm">Average Payout Time</p>
+              <h3 className="text-lg font-semibold text-white mb-2">24/7</h3>
+              <p className="text-gray-400 text-sm">Weather Monitoring</p>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useWeb3 } from '../contexts/Web3Context'
+import { ethers } from 'ethers'
 import { 
   Shield, 
   Cloud, 
@@ -101,12 +102,39 @@ export default function Home() {
     },
   ]
 
-  const stats = [
-    { label: 'Farmers Protected', value: '1,000+' },
-    { label: 'Claims Processed', value: '$2M+' },
+  const [stats, setStats] = useState([
+    { label: 'Policies Created', value: '...' },
+    { label: 'Claims Processed', value: '...' },
     { label: 'Average Payout Time', value: '< 24h' },
-    { label: 'Coverage Available', value: '$50M+' },
-  ]
+    { label: 'Treasury Balance', value: '...' },
+  ])
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const provider = new ethers.JsonRpcProvider('https://coston2-api.flare.network/ext/C/rpc')
+        const insurance = new ethers.Contract(
+          '0x0982Cd8B1122bA2134BF44A137bE814708Fd821F',
+          ['function getPolicyCount() view returns (uint256)', 'function getClaimCount() view returns (uint256)', 'function treasuryBalance() view returns (uint256)'],
+          provider
+        )
+        const [policyCount, claimCount, treasury] = await Promise.all([
+          insurance.getPolicyCount(),
+          insurance.getClaimCount(),
+          insurance.treasuryBalance()
+        ])
+        setStats([
+          { label: 'Policies Created', value: policyCount.toString() },
+          { label: 'Claims Processed', value: claimCount.toString() },
+          { label: 'Average Payout Time', value: '< 24h' },
+          { label: 'Treasury Balance', value: `${parseFloat(ethers.formatEther(treasury)).toFixed(2)} C2FLR` },
+        ])
+      } catch (error) {
+        console.error('Failed to fetch stats:', error)
+      }
+    }
+    fetchStats()
+  }, [])
 
   const steps = [
     { step: 1, title: 'Connect Wallet', description: 'Connect your MetaMask or Flare wallet to get started' },
