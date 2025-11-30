@@ -67,7 +67,7 @@ export default function CreatePolicy() {
 
   const calculatePremium = async () => {
     if (!contracts.insurance || !contracts.fdc) {
-      toast.error('Please connect your wallet first')
+      toast.error('Contracts not loaded. Please refresh the page.')
       return
     }
 
