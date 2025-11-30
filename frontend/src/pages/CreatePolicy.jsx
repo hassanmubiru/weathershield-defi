@@ -65,7 +65,20 @@ export default function CreatePolicy() {
   }
 
   const calculatePremium = async () => {
-    if (!contracts.insurance || !contracts.fdc) return
+    if (!contracts.insurance || !contracts.fdc) {
+      toast.error('Please connect your wallet first')
+      return
+    }
+
+    if (!formData.latitude || !formData.longitude) {
+      toast.error('Please enter farm coordinates')
+      return
+    }
+
+    if (!formData.coverageAmount || parseFloat(formData.coverageAmount) <= 0) {
+      toast.error('Please enter a valid coverage amount')
+      return
+    }
 
     setIsCalculating(true)
     try {
@@ -86,9 +99,14 @@ export default function CreatePolicy() {
       )
       
       setPremium(ethers.formatEther(premiumWei))
+      toast.success('Premium calculated successfully!')
     } catch (error) {
       console.error('Failed to calculate premium:', error)
-      toast.error('Failed to calculate premium')
+      if (error.message.includes('network')) {
+        toast.error('Please switch to Flare Coston2 Testnet')
+      } else {
+        toast.error('Failed to calculate premium. Please check your inputs.')
+      }
     } finally {
       setIsCalculating(false)
     }

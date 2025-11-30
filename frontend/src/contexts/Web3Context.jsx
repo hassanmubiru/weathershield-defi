@@ -167,6 +167,10 @@ export function Web3Provider({ children }) {
   // Auto-connect if previously connected
   useEffect(() => {
     const autoConnect = async () => {
+      // Initialize with read-only provider first
+      const readOnlyProvider = new ethers.JsonRpcProvider(NETWORK_CONFIG.rpcUrl)
+      await initializeContracts(readOnlyProvider)
+
       if (!window.ethereum) return
 
       try {

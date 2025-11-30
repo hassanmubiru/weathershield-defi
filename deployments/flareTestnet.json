@@ -1,0 +1,12 @@
+{
+  "network": "flareTestnet",
+  "timestamp": "2025-11-30T10:34:24.069Z",
+  "contracts": {
+    "FlareDataConnector": "0xF61C82188F0e4DF9082a703D8276647941b4E4f7",
+    "WeatherShieldInsurance": "0x0982Cd8B1122bA2134BF44A137bE814708Fd821F",
+    "PolicyFactory": "0x71b6977A253643378e0c5f05BA6DCF7295aBD4FA",
+    "WeatherOracle": "0x01C22438586BDD5a8d8481F409f841F35B2281fA"
+  },
+  "treasury": "0x50625608E728cad827066dD78F5B4e8d203619F3",
+  "deployer": "0x50625608E728cad827066dD78F5B4e8d203619F3"
+}

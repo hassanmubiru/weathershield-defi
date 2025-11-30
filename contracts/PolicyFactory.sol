@@ -195,62 +195,6 @@ contract PolicyFactory is Ownable {
     }
 
     /**
-     * @notice Create multiple policies in batch (simplified)
-     * @param templateId Template ID to use for all policies
-     * @param locationHashes Array of location hashes
-     * @param baseCoverage Base coverage amount for all policies
-     * @param cropType Crop type for all policies
-     * @param farmSize Farm size for all policies
-     */
-    function createBatchPolicies(
-        uint256 templateId,
-        bytes32[] calldata locationHashes,
-        uint256 baseCoverage,
-        string calldata cropType,
-        uint256 farmSize
-    ) external payable returns (uint256[] memory policyIds) {
-        require(templateId <= templateCount && templateId > 0, "PF: invalid template");
-        require(locationHashes.length > 0, "PF: empty array");
-        
-        PolicyTemplate storage template = templates[templateId];
-        require(template.isActive, "PF: template not active");
-
-        uint256 coverageAmount = (baseCoverage * template.coverageMultiplier) / 10000;
-        uint256 premiumPerPolicy = insuranceContract.calculatePremium(
-            coverageAmount,
-            template.duration,
-            template.triggerType
-        );
-        
-        uint256 totalPremium = premiumPerPolicy * locationHashes.length;
-        require(msg.value >= totalPremium, "PF: insufficient premium");
-
-        policyIds = new uint256[](locationHashes.length);
-
-        for (uint256 i = 0; i < locationHashes.length; i++) {
-            policyIds[i] = insuranceContract.createPolicy{value: premiumPerPolicy}(
-                locationHashes[i],
-                template.triggerType,
-                template.triggerThreshold,
-                coverageAmount,
-                template.duration,
-                cropType,
-                farmSize
-            );
-        }
-
-        // Refund excess
-        uint256 excess = msg.value - totalPremium;
-        if (excess > 0) {
-            (bool success, ) = payable(msg.sender).call{value: excess}("");
-            require(success, "PF: refund failed");
-        }
-
-        emit BatchPoliciesCreated(msg.sender, policyIds);
-        return policyIds;
-    }
-
-    /**
      * @notice Get all active templates
      */
     function getActiveTemplates() external view returns (PolicyTemplate[] memory) {
