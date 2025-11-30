@@ -13,9 +13,11 @@ import {
   AlertCircle,
   Loader2,
   CheckCircle,
-  Info
+  Info,
+  Cloud
 } from 'lucide-react'
 import { TRIGGER_TYPES, CROP_TYPES } from '../config/contracts'
+import WeatherWidget from '../components/WeatherWidget'
 
 export default function CreatePolicy() {
   const navigate = useNavigate()
@@ -39,6 +41,7 @@ export default function CreatePolicy() {
   const [useTemplate, setUseTemplate] = useState(false)
   const [templates, setTemplates] = useState([])
   const [selectedTemplate, setSelectedTemplate] = useState(null)
+  const [currentWeather, setCurrentWeather] = useState(null)
 
   useEffect(() => {
     if (contracts.factory && isCorrectNetwork) {
