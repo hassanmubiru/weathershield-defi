@@ -227,6 +227,19 @@ export default function CreatePolicy() {
             <Info className="h-3 w-3" />
             Enter the GPS coordinates of your farm for accurate weather tracking
           </p>
+
+          {/* Live Weather Widget */}
+          {formData.latitude && formData.longitude && (
+            <div className="mt-4">
+              <WeatherWidget
+                latitude={parseFloat(formData.latitude)}
+                longitude={parseFloat(formData.longitude)}
+                showAlerts={true}
+                showRiskAssessment={true}
+                onWeatherLoad={setCurrentWeather}
+              />
+            </div>
+          )}
         </div>
 
         {/* Protection Type Section */}
