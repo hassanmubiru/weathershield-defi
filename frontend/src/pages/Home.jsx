@@ -174,6 +174,60 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Live Weather Section */}
+      <section className="py-12 bg-gradient-to-b from-slate-900 to-slate-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-white mb-2 flex items-center justify-center gap-2">
+              <Cloud className="h-6 w-6 text-primary-400" />
+              Live Weather Monitoring
+            </h2>
+            <p className="text-gray-400 text-sm">Real-time conditions from major farming regions</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {liveWeather.map((loc, index) => (
+              <div key={index} className="card bg-slate-800/70 hover:bg-slate-800 transition-colors">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-red-400" />
+                    <span className="text-white font-medium">{loc.name}</span>
+                  </div>
+                  {loc.weather && (
+                    <img 
+                      src={getWeatherIconUrl(loc.weather.icon)} 
+                      alt={loc.weather.description}
+                      className="w-10 h-10"
+                    />
+                  )}
+                </div>
+                {loc.weather ? (
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Thermometer className="h-4 w-4 text-orange-400" />
+                      <span className="text-gray-300">{loc.weather.temperature}°C</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Droplets className="h-4 w-4 text-blue-400" />
+                      <span className="text-gray-300">{loc.weather.humidity}%</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Cloud className="h-4 w-4 text-blue-500" />
+                      <span className="text-gray-300">{loc.weather.rainfall}mm</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Wind className="h-4 w-4 text-cyan-400" />
+                      <span className="text-gray-300">{loc.weather.windSpeed}km/h</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-gray-500 text-sm">Loading...</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
