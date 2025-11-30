@@ -7,6 +7,7 @@
     "test": "hardhat test",
     "deploy:testnet": "hardhat run scripts/deploy.js --network flareTestnet",
     "deploy:mainnet": "hardhat run scripts/deploy.js --network flareMainnet",
+    "oracle": "node scripts/oracle-service.js",
     "frontend:dev": "cd frontend && npm run dev",
     "frontend:build": "cd frontend && npm run build"
   },
