@@ -1,7 +1,6 @@
 // Weather API Service - Fetches real weather data from OpenWeatherMap
-// Free tier: 1000 calls/day, which is sufficient for a demo app
 
-const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || 'demo'
+const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY
 const BASE_URL = 'https://api.openweathermap.org/data/2.5'
 
 /**
@@ -11,12 +10,11 @@ const BASE_URL = 'https://api.openweathermap.org/data/2.5'
  * @returns {Promise<Object>} Weather data
  */
 export async function getCurrentWeather(lat, lon) {
-  try {
-    // If no API key, return mock data for demo
-    if (OPENWEATHER_API_KEY === 'demo') {
-      return getMockWeatherData(lat, lon)
-    }
+  if (!OPENWEATHER_API_KEY) {
+    throw new Error('OpenWeatherMap API key not configured')
+  }
 
+  try {
     const response = await fetch(
       `${BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric`
     )
@@ -43,7 +41,7 @@ export async function getCurrentWeather(lat, lon) {
     }
   } catch (error) {
     console.error('Weather API error:', error)
-    return getMockWeatherData(lat, lon)
+    throw error
   }
 }
 
