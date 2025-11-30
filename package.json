@@ -1,0 +1,31 @@
+{
+  "name": "weathershield-defi",
+  "version": "1.0.0",
+  "description": "Decentralized parametric insurance platform for farmers on Flare Network",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network flareTestnet",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network flareMainnet",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "flare",
+    "defi",
+    "insurance",
+    "parametric",
+    "weather",
+    "blockchain"
+  ],
+  "author": "WeatherShield Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  }
+}
