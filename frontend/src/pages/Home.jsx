@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useWeb3 } from '../contexts/Web3Context'
 import { 
@@ -11,11 +12,38 @@ import {
   CheckCircle,
   Droplets,
   Thermometer,
-  Wind
+  Wind,
+  MapPin
 } from 'lucide-react'
+import WeatherWidget from '../components/WeatherWidget'
+import { getCurrentWeather, getWeatherIconUrl } from '../services/weatherApi'
 
 export default function Home() {
   const { account, connectWallet, isConnecting } = useWeb3()
+  const [liveWeather, setLiveWeather] = useState([])
+
+  // Featured farming regions for live weather display
+  const featuredLocations = [
+    { name: 'Iowa, USA', lat: 41.9, lon: -93.1 },
+    { name: 'Punjab, India', lat: 31.1, lon: 75.3 },
+    { name: 'São Paulo, Brazil', lat: -23.5, lon: -46.6 },
+  ]
+
+  useEffect(() => {
+    const fetchLiveWeather = async () => {
+      const weatherData = await Promise.all(
+        featuredLocations.map(async (loc) => {
+          const weather = await getCurrentWeather(loc.lat, loc.lon)
+          return { ...loc, weather }
+        })
+      )
+      setLiveWeather(weatherData)
+    }
+    fetchLiveWeather()
+    // Refresh every 5 minutes
+    const interval = setInterval(fetchLiveWeather, 5 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   const features = [
     {
