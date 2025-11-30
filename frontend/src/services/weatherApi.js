@@ -52,11 +52,11 @@ export async function getCurrentWeather(lat, lon) {
  * @returns {Promise<Object>} Forecast data
  */
 export async function getWeatherForecast(lat, lon) {
-  try {
-    if (OPENWEATHER_API_KEY === 'demo') {
-      return getMockForecast(lat, lon)
-    }
+  if (!OPENWEATHER_API_KEY) {
+    throw new Error('OpenWeatherMap API key not configured')
+  }
 
+  try {
     const response = await fetch(
       `${BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric`
     )
@@ -110,7 +110,7 @@ export async function getWeatherForecast(lat, lon) {
     }
   } catch (error) {
     console.error('Forecast API error:', error)
-    return getMockForecast(lat, lon)
+    throw error
   }
 }
 
@@ -175,11 +175,11 @@ export async function getWeatherAlerts(lat, lon) {
  * Get location name from coordinates (reverse geocoding)
  */
 export async function getLocationName(lat, lon) {
-  try {
-    if (OPENWEATHER_API_KEY === 'demo') {
-      return { name: 'Demo Location', country: 'XX' }
-    }
+  if (!OPENWEATHER_API_KEY) {
+    throw new Error('OpenWeatherMap API key not configured')
+  }
 
+  try {
     const response = await fetch(
       `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${OPENWEATHER_API_KEY}`
     )
@@ -205,11 +205,11 @@ export async function getLocationName(lat, lon) {
  * Search for locations by name
  */
 export async function searchLocations(query) {
-  try {
-    if (OPENWEATHER_API_KEY === 'demo') {
-      return []
-    }
+  if (!OPENWEATHER_API_KEY) {
+    throw new Error('OpenWeatherMap API key not configured')
+  }
 
+  try {
     const response = await fetch(
       `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=5&appid=${OPENWEATHER_API_KEY}`
     )
@@ -227,66 +227,6 @@ export async function searchLocations(query) {
   } catch (error) {
     console.error('Location search error:', error)
     return []
-  }
-}
-
-// Mock data generator for demo mode
-function getMockWeatherData(lat, lon) {
-  // Generate semi-realistic weather based on latitude
-  const absLat = Math.abs(lat)
-  const baseTemp = 30 - (absLat * 0.5) // Cooler at higher latitudes
-  const season = new Date().getMonth()
-  const seasonalAdjust = Math.sin((season - 3) * Math.PI / 6) * 10 // Summer/winter variation
-  
-  const temperature = Math.round((baseTemp + seasonalAdjust + (Math.random() * 10 - 5)) * 10) / 10
-  const humidity = Math.round(50 + Math.random() * 40)
-  const rainfall = Math.random() > 0.7 ? Math.round(Math.random() * 30 * 10) / 10 : 0
-  const windSpeed = Math.round((5 + Math.random() * 25) * 10) / 10
-
-  return {
-    temperature,
-    humidity,
-    rainfall,
-    windSpeed,
-    description: rainfall > 0 ? 'light rain' : temperature > 25 ? 'clear sky' : 'partly cloudy',
-    icon: rainfall > 0 ? '10d' : temperature > 25 ? '01d' : '02d',
-    location: 'Demo Location',
-    country: 'XX',
-    timestamp: Date.now(),
-    feels_like: temperature + (humidity > 70 ? 3 : -2),
-    pressure: 1013 + Math.round(Math.random() * 20 - 10),
-    clouds: Math.round(Math.random() * 100),
-  }
-}
-
-function getMockForecast(lat, lon) {
-  const forecast = []
-  const today = new Date()
-  
-  for (let i = 0; i < 5; i++) {
-    const date = new Date(today)
-    date.setDate(date.getDate() + i)
-    
-    const mockCurrent = getMockWeatherData(lat, lon)
-    forecast.push({
-      date: date.toDateString(),
-      temperature: {
-        min: mockCurrent.temperature - 5,
-        max: mockCurrent.temperature + 5,
-        avg: mockCurrent.temperature,
-      },
-      humidity: mockCurrent.humidity,
-      rainfall: Math.random() > 0.6 ? Math.round(Math.random() * 20 * 10) / 10 : 0,
-      windSpeed: mockCurrent.windSpeed,
-      icon: mockCurrent.icon,
-      description: mockCurrent.description,
-    })
-  }
-
-  return {
-    location: 'Demo Location',
-    country: 'XX',
-    forecast,
   }
 }
 
